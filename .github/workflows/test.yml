@@ -11,7 +11,6 @@ jobs:
   Test:
     name: Test
     runs-on: ubuntu-22.04
-
     steps:
     - uses: actions/checkout@v4
     - uses: actions/checkout@v4
@@ -19,5 +18,25 @@ jobs:
         repository: HdrHistogram/HdrHistogram_c
         path: HdrHistogram_c
     - run: |
-        bash test.sh
-        ./app
+        sudo apt-get update
+        sudo apt-get install -y clang
+    - run: |
+        for CC in clang gcc; do
+          for optimization in "-O0" "-O1" "-O2"; do
+          
+            pushd HdrHistogram_c
+            
+            git clean -fdx
+            env CFLAGS="$optimization -ggdb" "CC=$CC" cmake .
+            make
+            sudo make install
+            
+            popd
+            
+            gcc -shared -g -O0 -fPIC -DPIC -shared -export-dynamic lib.c -lhdr_histogram_static -lm -o lib.so
+            
+            gcc app.c -o app
+    
+            ./app
+          done
+        done
