@@ -4,7 +4,7 @@ pushd HdrHistogram_c/
 
 env CFLAGS="-O2 -ggdb" cmake .
 make
-make install
+sudo make install
 
 popd
 
