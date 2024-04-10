@@ -22,21 +22,23 @@ jobs:
         sudo apt-get install -y clang
     - run: |
         for CC in clang gcc; do
-          for optimization in "-O0" "-O1" "-O2"; do
+          for optimization in "-O0" "-O1" "-O1 -fipa-ra" "-O2 -fno-ipa-ra"; do
           
-            pushd HdrHistogram_c
+            pushd HdrHistogram_c > /dev/null
             
-            git clean -fdx
-            env CFLAGS="$optimization -ggdb" "CC=$CC" cmake .
-            make
-            sudo make install
+            git clean -fdx > /dev/null
+            env CFLAGS="$optimization -ggdb" "CC=$CC" cmake . > /dev/null
+            make > /dev/null
+            sudo make install > /dev/null
             
-            popd
+            popd > /dev/null
             
             gcc -shared -g -O0 -fPIC -DPIC -shared -export-dynamic lib.c -lhdr_histogram_static -lm -o lib.so
             
             gcc app.c -o app
+
     
+            printf "CC=%s O=%s ->" "$CC" "$optimization"
             ./app
           done
         done
