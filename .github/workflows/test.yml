@@ -1,0 +1,23 @@
+name: Test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  Test:
+    name: Test
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+      with:
+        repository: HdrHistogram/HdrHistogram_c
+        path: HdrHistogram_c
+    - run: |
+        bash test.sh
+        ./app
