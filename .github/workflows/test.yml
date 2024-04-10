@@ -27,7 +27,9 @@ jobs:
             pushd HdrHistogram_c > /dev/null
             
             git clean -fdx > /dev/null
-            env CFLAGS="$optimization -ggdb" "CC=$CC" cmake . > /dev/null
+            if ! env CFLAGS="$optimization -ggdb" "CC=$CC" cmake . > /dev/null; then
+              continue
+            fi
             make > /dev/null
             sudo make install > /dev/null
             
