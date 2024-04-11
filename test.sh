@@ -8,6 +8,6 @@ sudo make install
 
 popd
 
-gcc -shared -g -O0 -fPIC -DPIC -shared -export-dynamic lib.c -lhdr_histogram_static -lm -o lib.so
+gcc -shared -g -O0 lib.c -lhdr_histogram_static -lm -o lib.so
 
 gcc app.c -o app
